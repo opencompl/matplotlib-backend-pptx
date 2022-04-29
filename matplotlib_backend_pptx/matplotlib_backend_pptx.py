@@ -1,3 +1,4 @@
+# type: ignore
 """
 A fully functional, do-nothing backend intended as a template for backend
 writers.  It is fully functional in that you can select it as a backend e.g.
