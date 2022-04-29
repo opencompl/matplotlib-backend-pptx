@@ -24,7 +24,6 @@ method), you can register it as the default handler for a given file type::
     plt.savefig("figure.xyz")
 """
 
-from matplotlib import _api  # type: ignore
 from matplotlib._pylab_helpers import Gcf  # type: ignore
 from matplotlib.backend_bases import (  # type: ignore
     FigureCanvasBase,
@@ -33,6 +32,7 @@ from matplotlib.backend_bases import (  # type: ignore
     RendererBase,
 )
 from matplotlib.figure import Figure  # type: ignore
+from pptx import Presentation
 
 
 class RendererTemplate(RendererBase):
@@ -203,17 +203,15 @@ class FigureCanvasTemplate(FigureCanvasBase):
     # you should add it to the class-scope filetypes dictionary as follows:
     filetypes = {**FigureCanvasBase.filetypes, "foo": "My magic Foo format"}
 
-    @_api.delete_parameter("3.5", "args")
-    def print_foo(self, filename, *args, **kwargs):
-        """
-        Write out format foo.
-        This method is normally called via `.Figure.savefig` and
-        `.FigureCanvasBase.print_figure`, which take care of setting the figure
-        facecolor, edgecolor, and dpi to the desired output values, and will
-        restore them to the original values.  Therefore, `print_foo` does not
-        need to handle these settings.
-        """
+    def print_pptx(self, filename, *args, **kwargs):
+
+        prs = Presentation()
+        blank_slide_layout = prs.slide_layouts[6]
+        prs.slides.add_slide(blank_slide_layout)
+
         self.draw()
+
+        prs.save(filename)
 
     def get_default_filetype(self):
         return "foo"
