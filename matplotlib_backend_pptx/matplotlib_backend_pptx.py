@@ -196,12 +196,12 @@ class FigureCanvasTemplate(FigureCanvasBase):
         renderer = RendererTemplate(self.figure.dpi)
         self.figure.draw(renderer)
 
-    # You should provide a print_xxx function for every file format
-    # you can write.
-
     # If the file type is not in the base set of filetypes,
     # you should add it to the class-scope filetypes dictionary as follows:
-    filetypes = {**FigureCanvasBase.filetypes, "foo": "My magic Foo format"}
+    filetypes = {
+        **FigureCanvasBase.filetypes,
+        "pptx": "PowerPoint Slide Format",
+    }
 
     def print_pptx(self, filename, *args, **kwargs):
 
