@@ -43,9 +43,10 @@ class RendererTemplate(RendererBase):
     documentation of the methods.
     """
 
-    def __init__(self, dpi):
+    def __init__(self, dpi, slide):
         super().__init__()
         self.dpi = dpi
+        self.slide = slide
 
     def draw_path(self, gc, path, transform, rgbFace=None):
         pass
@@ -185,6 +186,12 @@ class FigureCanvasTemplate(FigureCanvasBase):
         A high-level Figure instance
     """
 
+    def __init__(self, figure):
+        self.prs = Presentation()
+        blank_slide_layout = self.prs.slide_layouts[6]
+        self.slide = self.prs.slides.add_slide(blank_slide_layout)
+        super().__init__(figure)
+
     def draw(self):
         """
         Draw the figure using the renderer.
@@ -193,7 +200,7 @@ class FigureCanvasTemplate(FigureCanvasBase):
         deferred work (like computing limits auto-limits and tick
         values) that users may want access to before saving to disk.
         """
-        renderer = RendererTemplate(self.figure.dpi)
+        renderer = RendererTemplate(self.figure.dpi, self.slide)
         self.figure.draw(renderer)
 
     # If the file type is not in the base set of filetypes,
@@ -204,17 +211,11 @@ class FigureCanvasTemplate(FigureCanvasBase):
     }
 
     def print_pptx(self, filename, *args, **kwargs):
-
-        prs = Presentation()
-        blank_slide_layout = prs.slide_layouts[6]
-        prs.slides.add_slide(blank_slide_layout)
-
         self.draw()
-
-        prs.save(filename)
+        self.prs.save(filename)
 
     def get_default_filetype(self):
-        return "foo"
+        return "pptx"
 
 
 class FigureManagerTemplate(FigureManagerBase):
