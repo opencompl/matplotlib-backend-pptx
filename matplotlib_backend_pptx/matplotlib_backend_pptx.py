@@ -35,12 +35,9 @@ from matplotlib.figure import Figure  # type: ignore
 from pptx import Presentation
 
 
-class RendererTemplate(RendererBase):
+class RendererPPTX(RendererBase):
     """
     The renderer handles drawing/rendering operations.
-    This is a minimal do-nothing class that can be used to get started when
-    writing a new backend.  Refer to `.backend_bases.RendererBase` for
-    documentation of the methods.
     """
 
     def __init__(self, dpi, slide):
@@ -176,7 +173,7 @@ class FigureCanvasTemplate(FigureCanvasBase):
         deferred work (like computing limits auto-limits and tick
         values) that users may want access to before saving to disk.
         """
-        renderer = RendererTemplate(self.figure.dpi, self.slide)
+        renderer = RendererPPTX(self.figure.dpi, self.slide)
         self.figure.draw(renderer)
 
     # If the file type is not in the base set of filetypes,
